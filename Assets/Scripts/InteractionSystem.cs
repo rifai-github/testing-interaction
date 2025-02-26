@@ -7,6 +7,7 @@ public class InteractionSystem : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             Vector2 touchPosition = Input.GetTouch(0).position;
@@ -20,7 +21,7 @@ public class InteractionSystem : MonoBehaviour
                 }
             }
         }
-
+#else
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePosition = Input.mousePosition;
@@ -29,10 +30,11 @@ public class InteractionSystem : MonoBehaviour
             {
                 if (hit.collider.TryGetComponent<Interactable>(out var interactable))
                 {
-                    Debug.Log(hit.collider.gameObject.name + " - Touched");
+                    Debug.Log(hit.collider.gameObject.name + " - Clicked");
                     interactable.OnInteract?.Invoke();
                 }
             }
         }
+#endif
     }
 }
